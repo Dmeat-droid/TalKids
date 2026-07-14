@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalKids - Belajar Vokal Anak Tuli</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- MediaPipe CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <img src="icon.svg" alt="TalKids Logo" class="logo-icon">
+        <span class="logo-text">Tal<span>Kids</span></span>
+      </div>
+      <div class="header-actions">
+        <button id="btn-install" class="btn-icon hidden" title="Instal Aplikasi">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 11v4h-2v-4H8l4-4 4 4h-3z"/>
+          </svg>
+        </button>
+        <button id="btn-settings" class="btn-icon" title="Pengaturan Kalibrasi">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <!-- Left Panel: Instructions and Visuals -->
+      <section class="panel-left">
+        <div class="card instruction-card">
+          <h2 class="section-title">Latihan Vokal "A"</h2>
+          <div class="mouth-guide-container">
+            <!-- Animated SVG Mouth Guide -->
+            <svg class="mouth-guide-svg" viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="face-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffedd5" />
+                  <stop offset="100%" stop-color="#fed7aa" />
+                </linearGradient>
+              </defs>
+              <!-- Head -->
+              <circle cx="100" cy="100" r="70" fill="url(#face-grad)" stroke="#ea580c" stroke-width="4"/>
+              <!-- Eyes -->
+              <circle cx="75" cy="80" r="8" fill="#1e293b"/>
+              <circle cx="125" cy="80" r="8" fill="#1e293b"/>
+              <!-- Cheeks -->
+              <circle cx="60" cy="105" r="10" fill="#fca5a5" opacity="0.6"/>
+              <circle cx="140" cy="105" r="10" fill="#fca5a5" opacity="0.6"/>
+              <!-- Wide Opened Mouth (Letter A) -->
+              <ellipse class="guide-mouth" cx="100" cy="120" rx="20" ry="30" fill="#7f1d1d" stroke="#ea580c" stroke-width="6"/>
+              <path class="guide-tongue" d="M 85 132 Q 100 145 115 132 C 115 132 110 145 100 145 C 90 145 85 132 85 132 Z" fill="#f43f5e" />
+              <!-- Sound Waves -->
+              <path class="guide-wave w1" d="M 35 70 A 50 50 0 0 0 35 130" fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round"/>
+              <path class="guide-wave w2" d="M 165 70 A 50 50 0 0 1 165 130" fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="instruction-text">Buka mulutmu lebar-lebar dan bersuara <strong class="vowel-a">"AAAAA!"</strong></p>
+        </div>
+
+        <!-- Star Tracker Card -->
+        <div class="card streak-card">
+          <div class="streak-header">
+            <h3>Bintang yang Dikumpulkan</h3>
+            <span id="star-count" class="badge-count">⭐ 0</span>
+          </div>
+          <div id="stars-container" class="stars-shelf">
+            <!-- Empty state or stars will be added here -->
+            <p class="empty-shelf-text">Ayo kumpulkan bintang pertamamu!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Camera Feed, Audio Analyser & Sync Ring -->
+      <section class="panel-right">
+        <!-- Camera Card -->
+        <div class="card camera-card">
+          <div class="video-container">
+            <video id="webcam" autoplay playsinline muted></video>
+            <canvas id="canvas"></canvas>
+            
+            <!-- Loading Indicator -->
+            <div id="loading-overlay" class="overlay">
+              <div class="spinner"></div>
+              <p>Menyiapkan Kamera & AI...</p>
+            </div>
+            
+            <!-- Target Face Outline Frame -->
+            <div class="face-guide-frame"></div>
+          </div>
+          
+          <!-- Live Telemetry Badges -->
+          <div class="telemetry-bar">
+            <div id="badge-mouth" class="status-badge error">
+              <span class="icon">👄</span>
+              <span class="text">Mulut Tertutup</span>
+            </div>
+            <div id="badge-sound" class="status-badge error">
+              <span class="icon">🎙️</span>
+              <span class="text">Diam</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Validation & Timing Card -->
+        <div class="card validation-card">
+          <div class="validation-layout">
+            <!-- Circular Progress Timer -->
+            <div class="progress-ring-container">
+              <svg class="progress-ring" viewBox="0 0 120 120">
+                <circle class="progress-ring-bg" cx="60" cy="60" r="50" />
+                <circle id="progress-ring-bar" class="progress-ring-bar" cx="60" cy="60" r="50" />
+              </svg>
+              <div class="progress-inner">
+                <span class="vowel-letter">A</span>
+                <span id="timer-text" class="timer-value">0.0s</span>
+              </div>
+            </div>
+            
+            <!-- Live Level Bars -->
+            <div class="meters-container">
+              <div class="meter-group">
+                <label>Bentuk Mulut ("A")</label>
+                <div class="meter-bar-wrapper">
+                  <div id="bar-mouth" class="meter-bar" style="width: 0%"></div>
+                  <div class="threshold-line" id="thresh-mouth-line"></div>
+                </div>
+              </div>
+              <div class="meter-group">
+                <label>Kekuatan Suara</label>
+                <div class="meter-bar-wrapper">
+                  <div id="bar-audio" class="meter-bar" style="width: 0%"></div>
+                  <div class="threshold-line" id="thresh-audio-line"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Calibration Drawer (Settings) -->
+    <div id="calibration-drawer" class="drawer">
+      <div class="drawer-content">
+        <div class="drawer-header">
+          <h2>Kalibrasi Sensor</h2>
+          <button id="btn-close-settings" class="btn-close">&times;</button>
+        </div>
+        <div class="drawer-body">
+          <p class="help-text">Sesuaikan sensitivitas kamera dan mikrofon agar sesuai dengan anak Anda.</p>
+          
+          <div class="setting-item">
+            <div class="setting-label">
+              <span>Ambang Batas Buka Mulut (AI)</span>
+              <span id="lbl-thresh-mouth" class="val-badge">0.35</span>
+            </div>
+            <input type="range" id="slider-thresh-mouth" min="0.10" max="0.80" step="0.05" value="0.35">
+            <span class="slider-hint">Lebih rendah = lebih mudah dideteksi; Lebih tinggi = harus membuka mulut lebih lebar.</span>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <span>Ambang Batas Suara (Mic)</span>
+              <span id="lbl-thresh-audio" class="val-badge">0.03</span>
+            </div>
+            <input type="range" id="slider-thresh-audio" min="0.01" max="0.20" step="0.01" value="0.03">
+            <span class="slider-hint">Lebih rendah = suara pelan terdeteksi; Lebih tinggi = membutuhkan teriakan/suara lebih keras.</span>
+          </div>
+
+          <div class="setting-item">
+            <button id="btn-reset-calibration" class="btn-secondary">Kembalikan ke Default</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Modal Reward -->
+    <div id="success-overlay" class="overlay success-overlay hidden">
+      <div class="success-card">
+        <div class="star-burst">⭐</div>
+        <h2 class="success-title">Hebat!</h2>
+        <p class="success-subtitle">Kamu berhasil bersuara "A" selama 1 detik!</p>
+        <div class="reward-graphic">
+          <!-- Big Smiley Star SVG -->
+          <svg class="smiley-star" viewBox="0 0 100 100" width="120" height="120">
+            <path d="M 50 5 L 63 35 L 95 38 L 70 60 L 78 92 L 50 75 L 22 92 L 30 60 L 5 38 L 37 35 Z" fill="#fbbf24" stroke="#d97706" stroke-width="4" stroke-linejoin="round"/>
+            <circle cx="40" cy="45" r="5" fill="#1e293b"/>
+            <circle cx="60" cy="45" r="5" fill="#1e293b"/>
+            <path d="M 38 58 Q 50 68 62 58" fill="none" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="points-badge">+1 Bintang</div>
+        <button id="btn-continue" class="btn-primary">Main Lagi ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Particle / Confetti Canvas -->
+  <canvas id="effects-canvas"></canvas>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('[PWA] Service Worker registered', reg))
+          .catch((err) => console.error('[PWA] Service Worker registration failed', err));
+      });
+    }
+  </script>
+  
+  <!-- App JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>

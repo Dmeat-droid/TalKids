@@ -1,0 +1,18 @@
+{
+  "name": "TalKids - Belajar Vokal Anak Tuli",
+  "short_name": "TalKids",
+  "description": "Aplikasi pembelajaran bahasa oral interaktif untuk anak tuli menggunakan AI pelacak bibir dan suara.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f0f4f8",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
