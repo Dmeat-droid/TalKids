@@ -8,7 +8,9 @@ import '../models/learning_model.dart';
 import '../widgets/mascot_widget.dart';
 import '../widgets/mouth_guide_painter.dart';
 import '../widgets/sound_wave_animation.dart';
+import '../core/services/vibration_service.dart';
 import 'reward_screen.dart';
+
 
 class PracticeScreen extends StatefulWidget {
   final LearningItem item;
@@ -73,8 +75,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
         },
         onComplete: (isSuccess, recognizedWords) async {
           if (isSuccess) {
-            // Trigger strong haptic vibration for success
-            HapticFeedback.vibrate();
+            // Trigger custom haptic vibration for success (rhythmic)
+            VibrationService().vibrateCorrect();
             
             // Log success to SharedPreferences
             await ScoreService().recordPracticeSuccess(widget.item.id);
@@ -87,10 +89,14 @@ class _PracticeScreenState extends State<PracticeScreen> {
               ),
             );
           } else {
+            // Trigger custom haptic vibration for failure (warning)
+            VibrationService().vibrateIncorrect();
+
             // Tampilkan feedback visual
             setState(() {
               _isRecording = false; // Pastikan UI tombol dan animasi langsung mati
               _tioExpression = MascotExpression.greeting;
+
               
               bool isSingleLetter = widget.item.text.length == 1;
 
